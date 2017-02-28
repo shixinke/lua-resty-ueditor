@@ -3,7 +3,7 @@ Name
 
 lua-resty-ueditor - 一个针对ueditor(百度开源的html在线编辑器，一般用于网站文章编辑)的lua库
 
-Table of Contents
+Menu
 =================
 
 * [Name](#name)
@@ -17,17 +17,17 @@ Table of Contents
 * [Author](#author)
 
 
-状态
+status
 ======
 
 该库目前处于测试状态
 
-描述
+description
 ===========
 
 基于openresty(ngx-lua)的ueditor操作库
 
-使用说明
+synopsis
 ========
 
 1、前端页面配置
@@ -81,12 +81,12 @@ Table of Contents
 
 具体用法请参照examples下面的例子(注:上传目录要有可读写权限)
 
-[返回主菜单](#table-of-contents)
+[返回主菜单](#menu)
 
-主要方法
+methods
 =======
 
-[返回主菜单](#table-of-contents)
+[返回主菜单](#menu)
 
 new
 ---
@@ -100,7 +100,7 @@ new
 
     ueditor的配置文件(config.json)所在位置(默认在项目根目录下lib/resty/ueditor/config.json中).
 
-[返回主菜单](#table-of-contents)
+[返回主菜单](#menu)
 
 run
 -------
@@ -152,12 +152,13 @@ TODO
 
 * 支持远程抓图.
 
-[返回主菜单](#table-of-contents)
+[返回主菜单](#menu)
 
 Author
 ======
 
-shixinke (诗心客) <ishixinke@qq.com>
+shixinke (诗心客) <ishixinke@qq.com>  www.shixinke.com
 
-[返回主菜单](#table-of-contents)
+
+[返回主菜单](#menu)
 
