@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0dedd80-35f5-483f-8bd8-8b2c3eb24c90" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/ueditor.lua" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/resty/ueditor/ueditor.lua" afterPath="$PROJECT_DIR$/lib/resty/ueditor/ueditor.lua" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/resty/ueditor/uploader.lua" afterPath="$PROJECT_DIR$/lib/resty/ueditor/uploader.lua" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/0616a40cff2fbc52f3605ea5b16753bf.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/1f8b95b4e53f8ba0d80075b8fbf629c0.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/3052d75cb47925f5880bf8df163f99c0.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/4694f24a7e1d6b16bb039c80536322b9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/6f874c28e66c5b5c89a5aec0339b6834.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/718b81be1bf0b8cf3fe77646f19e877b.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/bc9dd1211537dac101dbbc4535b0d7e0.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/public/uploads/images/2017/02/28/cc781596d2dabd403a952187151216fd.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -90,8 +94,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="338">
-                <caret line="81" column="20" lean-forward="false" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+              <first_editor relative-caret-position="312">
+                <caret line="81" column="32" lean-forward="false" selection-start-line="81" selection-start-column="32" selection-end-line="81" selection-end-column="32" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -253,28 +257,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lua-resty-ueditor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lua-resty-ueditor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ueditor" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -707,12 +689,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1488253549001</updated>
-      <workItem from="1488253550687" duration="6687000" />
+      <workItem from="1488253550687" duration="7113000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6687000" />
+    <option name="totallyTimeSpent" value="7113000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1037" extended-state="0" />
@@ -866,8 +848,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="338">
-            <caret line="81" column="20" lean-forward="false" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+          <first_editor relative-caret-position="312">
+            <caret line="81" column="32" lean-forward="false" selection-start-line="81" selection-start-column="32" selection-end-line="81" selection-end-column="32" />
             <folding />
           </first_editor>
           <second_editor />

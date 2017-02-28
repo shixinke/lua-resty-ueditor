@@ -79,7 +79,7 @@ Table of Contents
     end
 ```
 
-具体用法请参照examples下面的例子
+具体用法请参照examples下面的例子(注:上传目录要有可读写权限)
 
 [返回主菜单](#table-of-contents)
 
