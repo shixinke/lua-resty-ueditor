@@ -11,6 +11,38 @@ local popen = io.popen
 local regex = ngx.re
 local substr = string.sub
 local ngx_var = ngx.var
+local strlen = string.len
+local str_replace = string.gsub
+
+
+local function get_mtime(file)
+    local mat = regex.match(file, '[0-9]{4}-[0-9]{2}-[0-9]{2}\\s+[0-9]{2}:[0-9]{2}:[0-9]{2}', 'isjo')
+    if mat then
+        return mat[0]
+    end
+end
+
+local function get_path(file)
+    local tab = {}
+    local iterator, err
+    iterator, err = regex.gmatch(file..' ', '([^\\s]+)\\s+', 'ijso')
+    if not iterator then
+        tab = {file}
+        return tab, err
+    end
+    local m, err = iterator()
+    if not m then
+        tab = {file}
+        return tab, err
+    end
+    while m do
+        tab[#tab+1] = m[1]
+        m = iterator()
+    end
+
+    return tab[#tab]
+end
+
 
 local function upload(config, action)
     local conf = {}
@@ -43,36 +75,73 @@ local function upload(config, action)
     return loader:upload()
 end
 
-local function list_files(path, action)
-    local path = path and path or ngx_var.document_root
-    local fd = popen('ls --full-time '..path)
-    local file_info = {dir = '', mtime = 0, files = {}, total = 0}
+local function get_url(path)
+    local root = ngx_var.document_root
+    local root_len = strlen(root)
+    if substr(path, 1, root_len) ~= root then
+        return path
+    else
+        return substr(path, root_len+1)
+    end
+
+end
+
+local function list_files(path, start, size)
+    local path = path
+    local start = start and tonumber(start) or 1
+    if start < 1 then
+        start = 1
+    end
+    local size = size and tonumber(size) or 20
+    local endsize = start + size
+    local dir = ''
+    local files = {}
+    local info = {state = 'SUCCESS', list = {}, start = start, total = 0}
+    local root = ngx_var.document_root
+    local root_len = strlen(root)
+
+    if path and substr(path, -1, -1) == '/' then
+        path = substr(path, 1, -2)
+    end
+    if path == nil or path == '' then
+        path = root
+    elseif substr(path, 1, root_len) ~= root then
+        if substr(path, 1, 1) == '/' then
+            path = root..path
+        else
+            path = root..'/'..path
+        end
+    else
+        path = path
+    end
+
+    local fd = popen('ls -R --full-time '..path)
+
     for file in fd:lines() do
-        local tmp = {}
         local first = substr(file, 1, 1)
         if first == '/' then
-            file_info.dir = substr(file, 1, -1)
+            dir = substr(file, 1, -2)
         elseif first == 'd' then
-            local mtime = get_mtime(file)
-            mtime = mtime or ''
-            local path = get_path(file)
-            tmp = {type = 'dir', mtime = mtime, path = path, dir = tmp.dir}
+
         elseif first == '-' then
             local mtime = get_mtime(file)
             mtime = mtime or ''
-            local path = get_path(file)
-            tmp = {type = 'file', mtime = mtime, path = path, dir = tmp.dir }
+            local basename = get_path(file)
+            files[#files+1] = {url = get_url(dir..'/'..basename), mtime = mtime}
+            info.total = info.total +1
         elseif first == 't' then
-            local total = regex.sub(file, 'total\\s+', '')
-            file_info.total = tonumber(total)
+
         else
 
         end
-        if tmp.type then
-            file_info.files[#file_info.files+1] = tmp
+    end
+
+    for i in ipairs(files) do
+        if i>= start and i<=endsize then
+            info.list[#info.list+1] = files[i]
         end
     end
-    return file_info
+    return info
 end
 local function is_empty_table(tab)
     if type(tab) ~= 'table' then
@@ -86,58 +155,47 @@ local function is_empty_table(tab)
     return true
 end
 
-local function get_mtime(file)
-    local mat = regex.match(file, '[0-9]{4}-[0-9]{2}-[0-9]{2}\\s+[0-9]{2}:[0-9]{2}:[0-9]{2}', 'isjo')
-    if mat then
-        return mat[0]
-    end
-end
-
-local function get_path(file)
-    local tab = {}
-    local iterator, err
-    iterator, err = regex.gmatch(file..' ', '([^\\s]+)\\s+', 'ijso')
-    if not iterator then
-        tab = {file}
-        return tab, err
-    end
-    local m, err = iterator()
-    if not m then
-        tab = {file}
-        return tab, err
-    end
-    while m do
-        tab[#tab+1] = m[1]
-        m = iterator()
-    end
-
-    return tab[#tab]
-end
 
 
 function _M.new(self, options)
     local opt = options and options or {}
     self.configFile = opt.configFile
-    self.config = self:get_config()
+    local config = self:get_config()
+    self.config = config and config or {}
     return setmetatable(self, mt)
 end
 
-function _M.run(self, action)
-    local result,relative_path, err
+function _M.run(self, action, options)
+    local options = options and options or {}
+    local result,err
     if action == 'config' then
         result = self.config
     elseif action == 'uploadimage' or action == 'uploadscrawl' or action == 'uploadvideo' or action == 'uploadfile' then
-        result, relative_path, err = upload(self.config, action)
+        local file_info
+        file_info, err = upload(self.config, action)
+        result = {state = 'FAILED',  url = '', title = '', original = '', type='', size= 0}
+        if file_info then
+            result.state = 'SUCCESS'
+            result.url = file_info.url
+            result.title = file_info.basename
+            result.type = file_info.file_type
+            result.size = file_info.filesize
+        end
     elseif action == 'listimage' then
-        result = list_files(self.config.imageManagerListPath)
+        local start = options.start and tonumber(options.start) or 1
+        local size = options.size and tonumber(options.size) or 20
+        result = list_files(self.config.imageManagerListPath, start, size)
+
     elseif action == 'listfile' then
-        result = list_files(self.config.fileManagerListPath)
+        local start = options.start and tonumber(options.start) or 1
+        local size = options.size and tonumber(options.size) or 20
+        result = list_files(self.config.fileManagerListPath, start, size)
     elseif action == 'catchimage' then
 
     else
         err = '请求地址出错'
     end
-    return result, relative_path, err
+    return result, err
 end
 
 function _M.get_config(self)
@@ -175,8 +233,6 @@ end
 function _M.catch_image()
 
 end
-
-
 
 
 return _M

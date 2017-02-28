@@ -2,7 +2,8 @@ local upload = require "resty.upload"
 local _M = {_VERSION = '0.01' }
 local mt = {__index = _M }
 local ngx_var = ngx.var
-local gsub = string.gsub
+local substr = string.sub
+local strlen = string.len
 local fopen = io.open
 
 local chunk_size = 4096
@@ -13,6 +14,7 @@ local execute = os.execute
 local file
 local file_type
 local file_name
+local file_info = {}
 
 --获取文件扩展名
 local function get_ext(res)
@@ -166,6 +168,8 @@ function _M.upload(self)
                     return nil, nil, '未获取到文件后缀'
                 end
 
+                file_info.file_type = '.'..extension
+
                 if not in_array('.'..extension, self.allow_exts) then
                     return nil, nil, '不支持这种文件格式'
                 end
@@ -179,6 +183,7 @@ function _M.upload(self)
                         return nil, nil, '创建目录失败'
                     end
                 end
+                file_info.basename = file_id
                 file_name = dir..file_id.."."..extension
                 if file_name then
                     file = io.open(file_name, "w+")
@@ -188,8 +193,11 @@ function _M.upload(self)
                 end
             end
         elseif typ == "body" then
-            if type(tonumber(res)) == 'number' and tonumber(res) > self.max_size then
-                return nil, nil, '文件超过规定大小'
+            if type(tonumber(res)) == 'number' then
+                file_info.filesize = tonumber(res)
+                if file_info.filesize > self.max_size then
+                    return nil, nil, '文件超过规定大小'
+                end
             end
             if file then
                 file:write(res)
@@ -200,8 +208,13 @@ function _M.upload(self)
                 file = nil
             end
         elseif typ == "eof" then
-            local relative_path = gsub(file_name, ngx_var.document_root, '')
-            return file_name, relative_path
+            local root = ngx_var.document_root
+            local root_len = strlen(root)
+            local relative_path = substr(file_name, root_len+1)
+
+            file_info.url = relative_path
+            file_info.full_path = file_name
+            return file_info
         else
 
         end
